@@ -14,7 +14,7 @@ public class CuteString {
         byte[] bytes = str.getBytes();
 
         for (int i = 0; i < str.length(); i++) {
-            int interim = 1;
+            int interim = 0;
             int replacements = k;
             int lastFit = -1;
             boolean isSignFirst = true;
@@ -23,8 +23,9 @@ public class CuteString {
                 if (bytes[i] != bytes[j]) {
                     if (replacements == 0) {
                         replacements = k;
-                        interim = 1;
-                        j = lastFit;
+                        System.out.print("int = " + interim + ", ");
+                        interim = 0;
+                        j = lastFit != -1 ? lastFit + 1 : j;
                         lastFit = -1;
                         isSignFirst = true;
                     }
