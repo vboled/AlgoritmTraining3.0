@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Diego {
 
@@ -10,11 +11,11 @@ public class Diego {
     public static void main(String[] args) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(inputFileName));
 
-        List<Integer> nums = new ArrayList<>(Integer.parseInt(lines.get(0)));
+        TreeSet<Integer> treeSet = new TreeSet<>();
         for (String s : lines.get(1).split(" ")) {
-            nums.add(Integer.valueOf(s));
+            treeSet.add(Integer.valueOf(s));
         }
-        nums.sort(Integer::compareTo);
+        List<Integer> nums = treeSet.stream().collect(Collectors.toList());
 
         int n = Integer.parseInt(lines.get(2));
 
@@ -33,17 +34,16 @@ public class Diego {
 
         for (int i = 0; i < n; i++) {
             while (j < nums.size() && traders[i][1] > nums.get(j)) {
-                int currentValue = nums.get(j);
-                while (j < nums.size() && currentValue == nums.get(j)) {
-                    j++;
-                }
                 res++;
+                j++;
             }
             result[traders[i][0]] = res;
         }
-
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
-            System.out.println(result[i]);
+            sb.append(result[i]);
+            sb.append("\n");
         }
+        System.out.print(sb);
     }
 }
