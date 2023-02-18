@@ -1,5 +1,6 @@
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Diego {
@@ -7,31 +8,42 @@ public class Diego {
     public static final String inputFileName = "input.txt";
 
     public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(new File(inputFileName));
+        List<String> lines = Files.readAllLines(Paths.get(inputFileName));
 
-        int collectionSize = scanner.nextInt();
-        TreeSet<Integer> treeSet = new TreeSet<>();
-        for (int i = 0; i < collectionSize; i++) {
-            treeSet.add(scanner.nextInt());
+        List<Integer> nums = new ArrayList<>(Integer.parseInt(lines.get(0)));
+        for (String s : lines.get(1).split(" ")) {
+            nums.add(Integer.valueOf(s));
+        }
+        nums.sort(Integer::compareTo);
+
+        int n = Integer.parseInt(lines.get(2));
+
+        int[][] traders = new int[n][2];
+        int[] result = new int[n];
+
+        int k = 0;
+        for (String s : lines.get(3).split(" ")) {
+            traders[k][1] = Integer.parseInt(s);
+            traders[k][0] = k++;
         }
 
-        int n = scanner.nextInt();
+        Arrays.sort(traders, Comparator.comparing(l -> l[1]));
 
-        List<Integer> traders = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            traders.add(scanner.nextInt());
-        }
+        int res = 0, j = 0;
 
         for (int i = 0; i < n; i++) {
-            int res = 0;
-            for (Integer num : treeSet) {
-                if (num < traders.get(i)) {
-                    res++;
-                } else {
-                    break;
+            while (j < nums.size() && traders[i][1] > nums.get(j)) {
+                int currentValue = nums.get(j);
+                while (j < nums.size() && currentValue == nums.get(j)) {
+                    j++;
                 }
+                res++;
             }
-            System.out.println(res);
+            result[traders[i][0]] = res;
+        }
+
+        for (int i = 0; i < n; i++) {
+            System.out.println(result[i]);
         }
     }
 }
