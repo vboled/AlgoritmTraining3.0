@@ -14,29 +14,21 @@ public class CuteString {
         byte[] bytes = str.getBytes();
 
         for (char ch = 'a'; ch <= 'z'; ch++) {
-            int repl = k;
-            int j = -1;
-            int i = str.indexOf(ch);
-            if (i == -1)
-                continue;
-            while (i < str.length()) {
-                if (j == -1) {
-                    j = i + 1;
-                } else {
-                    if (bytes[i - 1] != ch) {
-                        repl++;
-                    }
-                }
+            int j = 0;
+            int replacements = k;
+            for (int i = 0; i < str.length(); i++) {
                 while (j < str.length()) {
                     if (bytes[j] != ch) {
-                        if (repl == 0)
+                        if (replacements == 0)
                             break;
-                        repl--;
+                        replacements--;
                     }
                     j++;
                 }
                 result = Math.max(result, j - i);
-                i++;
+                if (bytes[i] != ch) {
+                    replacements++;
+                }
             }
         }
         System.out.println(result);
