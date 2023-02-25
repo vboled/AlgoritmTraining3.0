@@ -28,15 +28,14 @@ public class CuteString {
                     }
                 }
                 while (j < str.length()) {
-                    if (bytes[j] != bytes[i]) {
+                    if (bytes[j] != ch) {
                         if (repl == 0)
                             break;
                         repl--;
                     }
                     j++;
                 }
-                int interim = j - i;
-                result = result > interim ? result : interim;
+                result = Math.max(result, j - i);
                 i++;
             }
         }
