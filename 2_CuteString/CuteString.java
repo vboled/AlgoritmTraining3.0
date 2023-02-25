@@ -7,42 +7,38 @@ public class CuteString {
     private static final String inputFileName = "input.txt";
     public static void main(String[] args) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(inputFileName));
-        int k = Integer.valueOf(lines.get(0));
+        int k = Integer.parseInt(lines.get(0));
         String str = lines.get(1);
 
         int result = 0;
         byte[] bytes = str.getBytes();
 
-        for (int i = 0; i < str.length(); i++) {
-            int interim = 0;
-            int replacements = k;
-            int lastFit = -1;
-            boolean isSignFirst = true;
-
-            for (int j = str.length() - 1; j > i; j--) {
-                if (bytes[i] != bytes[j]) {
-                    if (replacements == 0) {
-                        replacements = k;
-                        System.out.print("int = " + interim + ", ");
-                        interim = 0;
-                        j = lastFit != -1 ? lastFit + 1 : j;
-                        lastFit = -1;
-                        isSignFirst = true;
-                    }
-                    replacements--;
+        for (char ch = 'a'; ch <= 'z'; ch++) {
+            int repl = k;
+            int j = -1;
+            int i = str.indexOf(ch);
+            if (i == -1)
+                continue;
+            while (i < str.length()) {
+                if (j == -1) {
+                    j = i + 1;
                 } else {
-                    if (isSignFirst) {
-                        isSignFirst = false;
-                    } else {
-                        lastFit = lastFit == -1 ? j : lastFit;
-                        System.out.print(lastFit + " ");
-                        System.out.print(j + ", ");
+                    if (bytes[i - 1] != ch) {
+                        repl++;
                     }
                 }
-                interim++;
-                result = result < interim ? interim : result;
+                while (j < str.length()) {
+                    if (bytes[j] != bytes[i]) {
+                        if (repl == 0)
+                            break;
+                        repl--;
+                    }
+                    j++;
+                }
+                int interim = j - i;
+                result = result > interim ? result : interim;
+                i++;
             }
-            System.out.println("i = " + i);
         }
         System.out.println(result);
     }
